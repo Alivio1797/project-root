@@ -25,6 +25,8 @@ export default class LoginView {
 
         <button type="submit">Login</button>
       </form>
+      <p>Belum punya akun? <a href="#/register" id="register-link">Daftar di sini</a></p>
+
     `;
   }
 
