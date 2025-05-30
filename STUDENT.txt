@@ -1,1 +1,2 @@
-Hosting URL: https://story-sharing-app-mrz.web.app
+Hosting URL: https://story-sharing-app-mrz.firebaseapp.com/
+GitHub : https://github.com/Alivio1797/project-root
