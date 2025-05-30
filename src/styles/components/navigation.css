@@ -1,0 +1,28 @@
+nav {
+  background-color: #4CAF50;
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+}
+
+nav a, nav button {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+nav a:hover, nav button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}

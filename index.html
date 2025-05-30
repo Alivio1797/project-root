@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#3367D6">
+  <title>Story Sharing App</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="apple-touch-icon" href="/icons/icon-128x128.png">
+  <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+  <a href="#main-content" id="skip-link" class="skip-link">Skip to Content</a>
+
+  <header id="app-header" role="banner">
+    <!-- Header content -->
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section id="app">
+      <!-- Konten aplikasi dinamis -->
+
+      <!-- Area peta dengan aksesibilitas -->
+      <div id="map" role="region" aria-label="Peta lokasi cerita"></div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>© 2023 Story Sharing App</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="bundle.js"></script>
+</body>
+</html>
