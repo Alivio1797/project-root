@@ -2,7 +2,7 @@ export default class NavigationPresenter {
   constructor(view, model) {
     this.view = view;
     this.model = model;
-    this.isSubscribed = false; 
+    this.isSubscribed = false;
   }
 
   async init() {
@@ -22,25 +22,31 @@ export default class NavigationPresenter {
 
   async onSubscribe() {
     try {
-      const registration = await navigator.serviceWorker.ready;
-      const existing = await registration.pushManager.getSubscription();
-      if (!existing) {
-        const key = 'BAEYDXBp5IVfy8RtJ6egDBJfT0T04Vd4E8ttcsbWOroiodoMQo3hhhtSvfHE8EwKibi-zkyq01vGhXb48urE2WA'; 
-        const applicationServerKey = this.urlBase64ToUint8Array(key);
-        await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
+      const registration = await navigator.serviceWorker.register('/sw.js');
+      const permission = await Notification.requestPermission();
+
+      if (permission !== 'granted') {
+        alert('Izin notifikasi tidak diberikan.');
+        return;
       }
-     
-      const subscription = await registration.pushManager.getSubscription();
-      await fetch('/subscribe', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(subscription)
+
+      const vapidKey = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
+      const convertedKey = this.urlBase64ToUint8Array(vapidKey);
+
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedKey,
       });
+
+      console.log('Push Subscription:', JSON.stringify(subscription, null, 2));
+
+      // Jika kamu tidak punya endpoint backend, jangan lakukan POST
+      alert('Berhasil subscribe notifikasi.');
+
       this.isSubscribed = true;
       this.view.updateNav();
-      alert('Berhasil subscribe notifikasi!');
     } catch (err) {
-      console.error('Subscribe failed:', err);
+      console.error('Subscribe error:', err);
       alert('Gagal subscribe: ' + err.message);
     }
   }
@@ -51,11 +57,10 @@ export default class NavigationPresenter {
       const sub = await registration.pushManager.getSubscription();
       if (sub) {
         await sub.unsubscribe();
-        await fetch('/unsubscribe', {
-          method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ endpoint: sub.endpoint })
-        });
+        // Tidak perlu kirim ke server jika tidak ada backend
+        console.log('Push subscription canceled.');
       }
+
       this.isSubscribed = false;
       this.view.updateNav();
       alert('Berhasil unsubscribe notifikasi!');
@@ -67,9 +72,11 @@ export default class NavigationPresenter {
 
   urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const base64 = (base64String + padding)
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
     const rawData = window.atob(base64);
-    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+    return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
   }
 
   updateNav() {
